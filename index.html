@@ -700,9 +700,40 @@ function importPresets(ev) {
 }
 document.addEventListener('DOMContentLoaded', () => refreshPresetList());
 
+/* ---------------- Log to Google Sheet on print ---------------- */
+const SHEET_WEBAPP_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+
+function collectSheetPayload() {
+  return {
+    op_date: raw('op_date'), op_start: raw('op_start'), op_stop: raw('op_stop'),
+    pt_name: raw('pt_name'), pt_hn: raw('pt_hn'),
+    surgeon: raw('surgeon'), anesthesiologist: raw('anesthesiologist'),
+    assistant: raw('assistant'), assistant2: raw('assistant2'),
+    scrub: raw('scrub'), circulating: raw('circulating'), anesthetist: raw('anesthetist'), anesthesia: raw('anesthesia'),
+    diagnosis: raw('diagnosis'), postop_dx: postopDx(), procedure: raw('procedure'),
+    wound_class: raw('wound_class'), antibiotic: raw('antibiotic'),
+    specimen: raw('specimen_dest') + (raw('specimen_detail') ? ' — ' + raw('specimen_detail') : ''),
+    position: raw('position'), approach: raw('approach'), finding: raw('finding'), proc_text: raw('proc_text'),
+    drain: raw('drain'), ebl: raw('ebl'), complications: raw('complications'), disposition: raw('disposition')
+  };
+}
+
+function sendToSheet() {
+  if (!SHEET_WEBAPP_URL || SHEET_WEBAPP_URL.indexOf('PASTE_YOUR') === 0) return;
+  try {
+    fetch(SHEET_WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(collectSheetPayload())
+    });
+  } catch (e) { /* printing must not be blocked by a logging failure */ }
+}
+
 function doPrint() {
   populatePrintPage();
   fitToOnePage();
+  sendToSheet();
   setTimeout(() => window.print(), 100);
 }
 </script>
