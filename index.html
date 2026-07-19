@@ -712,9 +712,7 @@ function collectSheetPayload() {
     scrub: raw('scrub'), circulating: raw('circulating'), anesthetist: raw('anesthetist'), anesthesia: raw('anesthesia'),
     diagnosis: raw('diagnosis'), postop_dx: postopDx(), procedure: raw('procedure'),
     wound_class: raw('wound_class'), antibiotic: raw('antibiotic'),
-    specimen: raw('specimen_dest') + (raw('specimen_detail') ? ' — ' + raw('specimen_detail') : ''),
-    position: raw('position'), approach: raw('approach'), finding: raw('finding'), proc_text: raw('proc_text'),
-    drain: raw('drain'), ebl: raw('ebl'), complications: raw('complications'), disposition: raw('disposition')
+    specimen: raw('specimen_dest') + (raw('specimen_detail') ? ' — ' + raw('specimen_detail') : '')
   };
 }
 
